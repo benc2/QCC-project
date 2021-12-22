@@ -1,10 +1,10 @@
-- HFL: /home/rik/PycharmProjects/QCC-project/app/app_sender.py
+- HFL: /mnt/c/users/benja/Programming/PycharmProjects/QCC-project/app/app_sender.py
   HLN: 48
   INS: SEND
   LOG: 'Send classical message to receiver: {"header": "Corrections", "payload": [0,
-    0]}'
-  MSG: 'Corrections: (0, 0)'
+    1]}'
+  MSG: 'Corrections: (0, 1)'
   REC: receiver
   SEN: sender
   SOD: 0
-  WCT: '2021-12-22 17:15:23.117506'
+  WCT: '2021-12-22 17:26:40.924272'
