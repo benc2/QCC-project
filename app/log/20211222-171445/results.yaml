@@ -1,0 +1,18 @@
+app_receiver:
+  correction1: None
+  correction2: None
+  fidelity: 0.07073720850040016
+  original_state:
+  - - !!python/complex 0.5353686008338515
+    - !!python/complex 0.49874749330202717
+  - - !!python/complex 0.49874749330202717
+    - !!python/complex 0.4646313991661485
+  received_state:
+  - - !!python/complex 0.5353686076665483
+    - !!python/complex -0.4987474928174875+2.465190328815662e-32j
+  - - !!python/complex -0.4987474928174875-2.465190328815662e-32j
+    - !!python/complex 0.46463139233345163
+app_sender:
+  m1: 0
+  m2: 0
+backend: null

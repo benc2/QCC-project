@@ -1,0 +1,19 @@
+- HFL: /home/rik/PycharmProjects/QCC-project/app/app_receiver.py
+  HLN: 26
+  INS: WAIT_RECV
+  LOG: Waiting for a classical message from sender...
+  MSG: null
+  REC: receiver
+  SEN: sender
+  SOD: 0
+  WCT: '2021-12-22 17:15:22.952757'
+- HFL: /home/rik/PycharmProjects/QCC-project/app/app_receiver.py
+  HLN: 26
+  INS: RECV
+  LOG: 'Message received from sender: StructuredMessage(header=''Corrections'', payload=[0,
+    0])'
+  MSG: 'Corrections: [0, 0]'
+  REC: receiver
+  SEN: sender
+  SOD: 0
+  WCT: '2021-12-22 17:15:23.168810'
