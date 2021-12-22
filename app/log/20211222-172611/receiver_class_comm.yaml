@@ -6,7 +6,7 @@
   REC: receiver
   SEN: sender
   SOD: 0
-  WCT: '2021-12-22 17:26:58.014630'
+  WCT: '2021-12-22 17:26:11.479514'
 - HFL: /home/rik/PycharmProjects/QCC-project/app/app_receiver.py
   HLN: 26
   INS: RECV
@@ -16,4 +16,4 @@
   REC: receiver
   SEN: sender
   SOD: 0
-  WCT: '2021-12-22 17:26:58.118357'
+  WCT: '2021-12-22 17:26:11.605286'
