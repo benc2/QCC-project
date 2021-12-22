@@ -1,0 +1,60 @@
+- BAS: null
+  INS: epr_EntanglementStage.START
+  LOG: start entanglement creation between the_hague and delft
+  MSR: null
+  NOD:
+  - the_hague
+  - delft
+  PTH:
+  - ch1
+  QGR:
+    8786287240876:
+      is_entangled: false
+      qubit_ids:
+      - - sender
+        - 0
+      state:
+      - - !!python/complex 0.5353686076665485
+        - !!python/complex 0.4987474928174875
+      - - !!python/complex 0.4987474928174875
+        - !!python/complex 0.46463139233345147
+  QID:
+  - 1
+  - 0
+  SIT: 106071.0
+  TYP: null
+  WCT: '2021-12-22 17:15:12.204796'
+- BAS: null
+  INS: epr_EntanglementStage.FINISH
+  LOG: entanglement of type 0 created between the_hague and delft
+  MSR: null
+  NOD:
+  - the_hague
+  - delft
+  PTH:
+  - ch1
+  QGR:
+    8786287240876:
+      is_entangled: false
+      qubit_ids:
+      - - sender
+        - 0
+      state:
+      - - !!python/complex 0.5353686076665485
+        - !!python/complex 0.4987474928174875
+      - - !!python/complex 0.4987474928174875
+        - !!python/complex 0.46463139233345147
+    8786293019968:
+      is_entangled: true
+      qubit_ids:
+      - - sender
+        - 1
+      - - receiver
+        - 0
+      state: null
+  QID:
+  - 1
+  - 0
+  SIT: 106072.0000000001
+  TYP: epr_EntanglementType.CK
+  WCT: '2021-12-22 17:15:12.213200'
