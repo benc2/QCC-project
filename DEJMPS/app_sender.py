@@ -13,36 +13,33 @@ def main(app_config=None, phi=0., theta=0.):
     socket = Socket("sender", "receiver", log_config=log_config)
 
     # Create a EPR socket for entanglement generation
-    epr_socket1 = EPRSocket("receiver")
-    epr_socket2 = EPRSocket("receiver")
+    epr_socket = EPRSocket("receiver")
+    # epr_socket2 = EPRSocket("receiver", 2)
 
-    print("`sender` will start to teleport a qubit to `receiver`")
+    print("Starting DEJMPS protocol")
 
     # Initialize the connection to the backend
     sender = NetQASMConnection(
         app_name=app_config.app_name,
         log_config=log_config,
-        epr_sockets=[epr_socket1, epr_socket2]
+        epr_sockets=[epr_socket]
     )
     with sender:
         # Create a qubit to teleport
-        # q = Qubit(sender)
-        # set_qubit_state(q, phi, theta)
+        q = Qubit(sender)
+        set_qubit_state(q, phi, theta)
 
         # Create EPR pairs
-        epr1 = epr_socket1.create()[0]
-        epr2 = epr_socket2.create()[0]
-
+        epr1, epr2 = epr_socket.create(number=2)  # create 2 EPR pairs
+        print("Created EPR pairs")
         # Teleport
         epr1.rot_X(1)  # in units of pi/2
-        dm = get_qubit_state(epr1)
-        print(f"Alice has state {dm}")
         epr2.rot_X(1)
         epr1.cnot(epr2)
+        print("Alice applied her gates")
+        # sender.flush()
         sender_outcome = int(epr2.measure())
-
-    # # Send the correction information
-    # m1, m2 = int(m1), int(m2)
+        print(f"Alice measured {sender_outcome}")
 
     # app_logger.log(f"m1 = {m1}")
     # app_logger.log(f"m2 = {m2}")

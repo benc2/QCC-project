@@ -12,25 +12,27 @@ def main(app_config=None):
     socket = Socket("receiver", "sender", log_config=log_config)
 
     # Create a EPR socket for entanglement generation
-    epr_socket1 = EPRSocket("sender")
-    epr_socket2 = EPRSocket("sender")
+    epr_socket = EPRSocket("sender")
+    # epr_socket2 = EPRSocket("sender", 2)
 
     # Initialize the connection
     receiver = NetQASMConnection(
         app_name=app_config.app_name,
         log_config=log_config,
-        epr_sockets=[epr_socket1, epr_socket2]
+        epr_sockets=[epr_socket]
     )
     with receiver:
-        epr1 = epr_socket1.recv()[0]
-        epr2 = epr_socket2.recv()[0]
-        receiver.flush()
+        epr1, epr2 = epr_socket.recv(number=2)  # receive the 2 qubits from Alice
+        print("Bob received the qubits from Alice")
+        # receiver.flush()
+        # print("flushed")
 
         epr1.rot_X(3)  # in units of pi/2, 3pi/2 = -pi/2 mod 2pi
         epr2.rot_X(3)
         epr1.cnot(epr2)
+        print("Bob applied his gates")
         receiver_outcome = int(epr2.measure())
-        print(f"Alice measured {receiver_outcome}")
+        print(f"Bob measured {receiver_outcome}")
         # Get the corrections
         sender_outcome = socket.recv_structured().payload
         print(f"Bob received outcome {sender_outcome} from Alice")
