@@ -1,6 +1,5 @@
-import numpy as np
 from netqasm.sdk import Qubit, EPRSocket
-from netqasm.sdk.external import NetQASMConnection, Socket, get_qubit_state
+from netqasm.sdk.external import NetQASMConnection, Socket
 from netqasm.sdk.toolbox import set_qubit_state
 from netqasm.logging.output import get_new_app_logger
 from netqasm.sdk.classical_communication.message import StructuredMessage
@@ -14,9 +13,8 @@ def main(app_config=None, phi=0., theta=0.):
 
     # Create a EPR socket for entanglement generation
     epr_socket = EPRSocket("receiver")
-    # epr_socket2 = EPRSocket("receiver", 2)
 
-    print("Starting DEJMPS protocol")
+    print("Starting (1 iteration of) DEJMPS protocol")
 
     # Initialize the connection to the backend
     sender = NetQASMConnection(
@@ -24,37 +22,26 @@ def main(app_config=None, phi=0., theta=0.):
         log_config=log_config,
         epr_sockets=[epr_socket]
     )
+    sender.flush()
     with sender:
-        # Create a qubit to teleport
-        q = Qubit(sender)
-        set_qubit_state(q, phi, theta)
-
         # Create EPR pairs
-        epr1, epr2 = epr_socket.create(number=2)  # create 2 EPR pairs
-        print("Created EPR pairs")
-        # Teleport
+        epr1, epr2 = epr_socket.create(number=2)  # note: in the paper, Eve makes the pairs and they are not
+        print("Alice has created the EPR pairs")  # necessarily EPR pairs
+        sender.flush()
         epr1.rot_X(1)  # in units of pi/2
         epr2.rot_X(1)
         epr1.cnot(epr2)
         print("Alice applied her gates")
-        # sender.flush()
-        sender_outcome = int(epr2.measure())
+        sender.flush()
+        sender_outcome = epr2.measure()
+        sender.flush()  # flush only for print
         print(f"Alice measured {sender_outcome}")
 
-    # app_logger.log(f"m1 = {m1}")
-    # app_logger.log(f"m2 = {m2}")
-    # print(f"`sender` measured the following teleportation corrections: m1 = {m1}, m2 = {m2}")
-    # print("`sender` will send the corrections to `receiver`")
-    print(f"Alice measured {sender_outcome}")
+    # Send the correction information
 
     socket.send_structured(StructuredMessage("Corrections", sender_outcome))
-
-    # socket.send_silent(str((phi, theta)))
-
-    # return {
-    #     "m1": m1,
-    #     "m2": m2
-    # }
+    print(f"Alice sent her outcome {sender_outcome} to Bob")
+    sender.flush()
 
 
 if __name__ == "__main__":
