@@ -1,4 +1,6 @@
 import math
+from netqasm.sdk.classical_communication.message import StructuredMessage
+
 
 
 def bbpssw_protocol_alice(q1, q2, alice, socket):
@@ -15,11 +17,19 @@ def bbpssw_protocol_alice(q1, q2, alice, socket):
     :return: True/False indicating if protocol was successful
     """
     a = bbpssw_gates_and_measurement_alice(q1, q2)
+
     alice.flush()
+    print("Alice has performed the operations")
 
+    a = int(a)
     # Write below the code to send measurement result to Bob, receive measurement result from Bob and check if protocol was successful
-    pass
+    socket.send_structured(StructuredMessage("Hey Bob, I measured ",(a)))
+    b= socket.recv_structured().payload
 
+    if a==b:
+        return True
+    else:
+        return False
 
 def bbpssw_gates_and_measurement_alice(q1, q2):
     """
@@ -28,7 +38,11 @@ def bbpssw_gates_and_measurement_alice(q1, q2):
     :param q2: Alice's qubit from the second entangled pair
     :return: Integer 0/1 indicating Alice's measurement outcome
     """
-    pass
+    q1.cnot(q2)
+    m = q2.measure()
+
+    return m
+
 
 
 def bbpssw_protocol_bob(q1, q2, bob, socket):
@@ -45,9 +59,18 @@ def bbpssw_protocol_bob(q1, q2, bob, socket):
     :return: True/False indicating if protocol was successful
     """
     b = bbpssw_gates_and_measurement_bob(q1, q2)
+    print("Bob has performed the operations")
     bob.flush()
-
+    b = int(b)
     # Write below the code to send measurement result to Alice, receive measurement result from Alice and check if protocol was successful
+    socket.send_structured(StructuredMessage("Hey Alice, I measured ",(b)))
+    a = socket.recv_structured().payload
+
+    if a==b:
+        return True
+    else:
+        return False
+
     pass
 
 def bbpssw_gates_and_measurement_bob(q1, q2):
@@ -57,5 +80,7 @@ def bbpssw_gates_and_measurement_bob(q1, q2):
     :param q2: Bob's qubit from the second entangled pair
     :return: Integer 0/1 indicating Bob's measurement outcome
     """
-    pass
+    q1.cnot(q2)
+    m = q2.measure()
+    return m
 
