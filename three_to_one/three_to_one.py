@@ -1,4 +1,5 @@
 import math
+from netqasm.sdk.classical_communication.message import StructuredMessage
 
 
 def three_to_one_protocol_alice(q1, q2, q3, alice, socket):
@@ -19,10 +20,11 @@ def three_to_one_protocol_alice(q1, q2, q3, alice, socket):
     outcome1, outcome2 = three_to_one_gates_and_measurement_alice(q1, q2, q3)
 
     alice.flush()
-
+    print("Alice flushed and got outcomes", outcome1, outcome2)
     # Write below the code to send measurement result to Bob, receive measurement result from Bob and check if protocol was successful
     socket.send_structured(StructuredMessage("My measurement results from qubit 1 and 2 are", (outcome1, outcome2)))
     outcome1_bob, outcome2_bob = socket.recv_structured().payload
+
     if[outcome1,outcome2]==[outcome1_bob,outcome2_bob]:
         return True
     else:
@@ -67,6 +69,7 @@ def three_to_one_protocol_bob(q1, q2, q3, bob, socket):
     outcome1, outcome2 = three_to_one_gates_and_measurement_bob(q1, q2,q3)  #Why was q3 here not in the template???????
 
     bob.flush()
+    print("Bob has flushed and got outcomes",outcome1,outcome2)
     outcome1_alice, outcome2_alice = socket.recv_structured().payload
 
     # Write below the code to send measurement result to Alice, receive measurement results from Alice and check if protocol was successful
