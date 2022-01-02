@@ -20,8 +20,10 @@ def main(app_config=None):
         bob.flush()
         print(f"Bob has received two qubits")
 
-        result = bbpssw_protocol_bob(q1, q2, bob, socket)
-        return result
-
+        success = bbpssw_protocol_bob(q1, q2, bob, socket)
+        if success:
+            print("Bob has kept the second qubit.")
+        else:
+            print("Bob has discarded the second qubit")
 if __name__ == "__main__":
     main()
