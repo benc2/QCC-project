@@ -17,22 +17,22 @@ def main(app_config=None):
         app_name=app_config.app_name,
         epr_sockets=[epr_socket]
     )
-
     # Create Alice's context, initialize EPR pairs inside it and call Alice's 3->1 method. Finally, print out whether or not Alice successfully created an EPR Pair with Bob.
     with alice:
-        epr1, epr2, epr3 = epr_socket.create(number=3)[0]
-
+        epr1, epr2, epr3 = epr_socket.create(number=3)
 
         #depolarize (step 1)
         pass
-
         #alice performs her gates
         success = three_to_one_protocol_alice(epr1,epr2,epr3,alice,socket)
+        # alice.flush()
 
-        if success:
-            print("Alice has kept the third qubit.")
-        else:
-            print("Alice has discarded the third qubit")
+    if success:
+        print("Alice has kept the third qubit.")
+    else:
+        print("Alice has discarded the third qubit")
+
+    return False
 
 if __name__ == "__main__":
     main()
