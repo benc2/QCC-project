@@ -19,13 +19,13 @@ def main(app_config=None):
     )
     # Create Alice's context, initialize EPR pairs inside it and call Alice's 3->1 method. Finally, print out whether or not Alice successfully created an EPR Pair with Bob.
     with alice:
-        epr1 = epr_socket.create(1`)[0]
+        epr1 = epr_socket.create()[0]
         alice.flush()
         print(f"Alice has created the first EPR pair")
-        epr2 = epr_socket.create(1)[0]
+        epr2 = epr_socket.create()[0]
         alice.flush()
         print(f"Alice has created the second EPR pair")
-        epr3 = epr_socket.create(1)[0]
+        epr3 = epr_socket.create()[0]
         alice.flush()
         print(f"Alice has created the third EPR pair")
         #depolarize (step 1)
