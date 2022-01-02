@@ -44,6 +44,7 @@ def three_to_one_gates_and_measurement_alice(q1, q2, q3):
     print("Alice has applied gates")
     #bell measureent of q1 and q2
     q1.cnot(q2)
+    q1.H()
     outcome1 = q1.measure()
     outcome2 = q2.measure()
     print("Alice has applied measurements")
@@ -92,6 +93,7 @@ def three_to_one_gates_and_measurement_bob(q1, q2,q3):   #Why was q3 here not in
     print("Bob has applied gates")
     #bell measureent of q1 and q2
     q1.cnot(q2)
+    q1.H()
     outcome1 = q1.measure()
     outcome2 = q2.measure()
     print("Bob has applied measurements")
