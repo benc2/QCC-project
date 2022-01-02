@@ -1,11 +1,10 @@
 from three_to_one import three_to_one_protocol_bob
 from netqasm.sdk import EPRSocket
 from netqasm.sdk.external import NetQASMConnection, Socket, get_qubit_state
-
 def main(app_config=None):
-    
-    # Create a socket for classical communication
-    socket = Socket("alice","bob")
+
+    # # Create a socket for classical communication
+    socket = Socket("bob","alice")
 
     # Create a EPR socket for entanglement generation
     epr_socket = EPRSocket("alice")
@@ -15,18 +14,19 @@ def main(app_config=None):
         app_name=app_config.app_name,
         epr_sockets=[epr_socket]
     )
-
     # Create Bob's context, initialize EPR pairs inside it and call Bob's 3->1 method. Finally, print out whether or not Bob successfully created an EPR Pair with Alice.
     with bob:
-        epr1, epr2, epr3 = EPRSocket.recv()[0]
-        bob.flush()
+
+        epr1, epr2, epr3 = epr_socket.recv(3)
 
         success = three_to_one_protocol_bob(epr1,epr2,epr3,bob,socket)
+        # bob.flush()
+    if success:
+        print("Bob has kept the third qubit.")
+    else:
+        print("Bob has discarded the third qubit")
 
-        if success:
-            print("Bob has kept the third qubit.")
-        else:
-            print("Bob has discarded the third qubit")
+    return True
 
 if __name__ == "__main__":
     main()
