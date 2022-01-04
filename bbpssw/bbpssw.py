@@ -39,6 +39,7 @@ def bbpssw_gates_and_measurement_alice(q1, q2):
     :return: Integer 0/1 indicating Alice's measurement outcome
     """
     q1.cnot(q2)
+    q2.H()
     m = q2.measure()
 
     return m
