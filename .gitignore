@@ -130,3 +130,4 @@ dmypy.json
 
 # project specific things
 netqasm/
+/bbpssw2/log/
