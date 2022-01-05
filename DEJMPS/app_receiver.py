@@ -32,10 +32,11 @@ def main(app_config=None):
         receiver.flush()
         receiver_outcome = epr2.measure()
         receiver.flush()
+        print(f"Bob measured {receiver_outcome}")
         sender_outcome = socket.recv_structured().payload
         receiver.flush()
         print(f"Bob received outcome {sender_outcome} from Alice")
-        print(f"Bob measured {receiver_outcome}")
+
 
     if sender_outcome == receiver_outcome:
         print(f"Success! Alice and Bob both measured {sender_outcome}")
