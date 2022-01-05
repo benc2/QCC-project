@@ -3,24 +3,24 @@ nodes:
     gate_fidelity: 1
     qubits:
       - id: 0
-        t1: 0
-        t2: 0
+        t1: 1.
+        t2: 0.5
       - id: 1
-        t1: 0
-        t2: 0
+        t1: 2.e+1
+        t2: 9.e+0
   - name: "delft"
     gate_fidelity: 1
     qubits:
       - id: 0
-        t1: 0
-        t2: 0
+        t1: 1.e+0
+        t2: 1.e-1
       - id: 1
-        t1: 0
-        t2: 0
+        t1: 1.e+0
+        t2: 2.e-1
 
 links:
   - name: ch1
     node_name1: "delft"
     node_name2: "the_hague"
     noise_type: Depolarise
-    fidelity: 1
+    fidelity: 0.8
