@@ -1,4 +1,4 @@
-from netqasm.sdk import EPRSocket
+from netqasm.sdk import EPRSocket, Qubit
 from netqasm.sdk.external import NetQASMConnection, Socket, get_qubit_state
 from netqasm.sdk.toolbox.sim_states import qubit_from, to_dm, get_fidelity
 
@@ -19,8 +19,18 @@ def main(app_config=None):
         epr_sockets=[epr_socket]
     )
     with receiver:
-        epr = epr_socket.recv()[0]
+        epr = Qubit( receiver)
         receiver.flush()
+        for ii in range(100):
+            epr.measure()
+            receiver.flush()
+
+            epr = epr_socket.recv()[0]
+            receiver.flush()
+
+            print(ii)
+        receiver.flush()
+
 
         # Get the corrections
         m1, m2 = socket.recv_structured().payload
