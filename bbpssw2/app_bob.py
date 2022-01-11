@@ -24,9 +24,10 @@ def main(app_config=None):
         bob.flush()
         q2 = epr_socket.recv()[0]
         if bbpssw_protocol_bob(q1, q2, bob, socket):
-            print("Bob keeps q1")
-        else:
-            print("Bob destroys q1")
+            # print("Bob keeps q1")
+            pass
+        # else:
+        #     print("Bob destroys q1")
 
 if __name__ == "__main__":
     main()
