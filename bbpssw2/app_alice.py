@@ -24,6 +24,7 @@ def main(app_config=None):
         alice.flush()
         print(info)
         original_dm = get_qubit_state(q1, reduced_dm=False)
+        print(original_dm)
         alice.flush()
         q2 = epr_socket.create(1)[0]
         # q2.rot_X(angle=1)
@@ -36,7 +37,7 @@ def main(app_config=None):
 
         dm = get_qubit_state(q1, reduced_dm=False)
         alice.flush()
-        print(original_dm)
+
         print(dm)
         phi00 = np.array([1, 0, 0, 1]) / np.sqrt(2)
         F_in = phi00.T @ original_dm @ phi00

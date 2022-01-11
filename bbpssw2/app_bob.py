@@ -10,7 +10,7 @@ def main(app_config=None):
 
 
     # Create a EPR socket for entanglement generation
-    epr_socket=EPRSocket("alice",min_fidelity=50)
+    epr_socket=EPRSocket("alice") #, min_fidelity=50)
 
     # Initialize Bob's NetQASM connection
     bob = NetQASMConnection(
