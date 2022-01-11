@@ -24,24 +24,25 @@ def main(app_config=None, phi=0., theta=0.):
         epr_sockets=[epr_socket]
     )
     N = 3
-    epr_list = epr_socket.create(number=N+1)
+    # epr_list = epr_socket.create(number=N+1)
     success = False
-    for i in range(N):
-        sender.flush()
-        print(f"iteration {i+1}")
-        with sender:
+    with sender:
+        for i in range(N):
+            # sender.flush()
+            print(f"iteration {i+1}")
             # Create EPR pairs
             print(f"Alice: success={success}")
-            # if not success:
-            #     epr1 = epr_socket.create()[0]  # note: in the paper, Eve makes the pairs
+            if not success:
+                epr1 = epr_socket.create()[0]  # note: in the paper, Eve makes the pairs
             # print("Alice sent first pair")
-            # sender.flush()
-            # original_dm = get_qubit_state(epr1, reduced_dm=False)
-            # epr2 = epr_socket.create()[0]
-
-            epr1 = epr_list[0]
+            sender.flush()
             original_dm = get_qubit_state(epr1, reduced_dm=False)
-            epr2 = epr_list[i+1]
+            sender.flush()
+            epr2 = epr_socket.create()[0]
+
+            # epr1 = epr_list[0]
+            # original_dm = get_qubit_state(epr1, reduced_dm=False)
+            # epr2 = epr_list[i+1]
             print("After receive")
             sender.flush()
             print("Alice has created the EPR pairs")
@@ -54,32 +55,34 @@ def main(app_config=None, phi=0., theta=0.):
             sender_outcome = epr2.measure()
             sender.flush()  # flush only for print
             print(f"Alice measured {sender_outcome}")
-            dm = get_qubit_state(epr1, reduced_dm=False)
+
 
             # Send the correction information
 
             socket.send_structured(StructuredMessage("Corrections", sender_outcome))
             print(f"Alice sent her outcome {sender_outcome} to Bob")
             sender.flush()
+            dm = get_qubit_state(epr1, reduced_dm=False)
 
             phi00 = np.array([1, 0, 0, 1]) / np.sqrt(2)
+            print(original_dm.shape)
+            print(dm.shape)
             F_in = phi00.T @ original_dm @ phi00
             F_out = phi00.T @ dm @ phi00
             print(f"F_in: {np.real(F_in)}, F_out: {np.real(F_out)}")
             success = socket.recv_structured().payload
-            if not success:
-                quit()
             sender.flush()
-            print("Alice tries to free")
-            # epr2.free()
-            # sender.flush()
             # if not success:
-            #     print("Not free")
-            #     epr1.free()
-            #     print("Free")
-            # print("flush?")
-            # sender.flush()
-            # print("flush!")
+            #     return
+            print("Alice tries to free")
+            sender.flush()
+            if not success:
+                print("Not free")
+                epr1.measure()
+                print("Free")
+            print("flush?")
+            sender.flush()
+            print("flush!")
 
 if __name__ == "__main__":
     main()

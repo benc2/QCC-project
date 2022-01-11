@@ -20,21 +20,22 @@ def main(app_config=None):
     )
     success = False
     N = 3
-    epr_list = epr_socket.recv(number=N+1)
-    for i in range(N):
-        print("begin of loop Bob")
-        with receiver:
+    # epr_list = epr_socket.recv(number=N+1)
+    with receiver:
+        for i in range(N):
+            print("begin of loop Bob")
+
             print("Before receive")
             print(f"Bob: success={success}")
-            # if not success:
-            #     epr1 = epr_socket.recv()[0]
-            epr1 = epr_list[0]
-            epr2 = epr_list[i+1]
+            if not success:
+                epr1 = epr_socket.recv()[0]
+            # epr1 = epr_list[0]
+            # epr2 = epr_list[i+1]
             print("After receive")
             receiver.flush()
-            # epr2 = epr_socket.recv()[0]
+            epr2 = epr_socket.recv()[0]
             print("Bob has received the EPR pairs")
-            # receiver.flush()
+            receiver.flush()
 
 
             # print(f"Bob received outcome {sender_outcome} from Alice")
@@ -50,22 +51,23 @@ def main(app_config=None):
             receiver.flush()
             print(f"Bob received outcome {sender_outcome} from Alice")
 
-        success = sender_outcome == receiver_outcome
-        if success:
-            print(f"Success! Alice and Bob both measured {sender_outcome}")
-        else:
-            print(f"Failure! Alice measured {sender_outcome }, but Bob measured {receiver_outcome}")
+            success = sender_outcome == receiver_outcome
+            if success:
+                print(f"Success! Alice and Bob both measured {sender_outcome}")
+            else:
+                print(f"Failure! Alice measured {sender_outcome }, but Bob measured {receiver_outcome}")
 
-            # receiver.flush()
-        socket.send_structured(StructuredMessage("Success?", success))
-        receiver.flush()
-        print("End of loop Bob")
-        print("Bob tries to free")
-        # epr2.free()
-        # receiver.flush()
-        # if not success:
-        #     epr1.free()
-        # receiver.flush()
+                # receiver.flush()
+            socket.send_structured(StructuredMessage("Success?", success))
+            receiver.flush()
+            # if not success:
+            #     return
+            print("End of loop Bob")
+            print("Bob tries to free")
+            receiver.flush()
+            if not success:
+                epr1.measure()
+            receiver.flush()
 
 if __name__ == "__main__":
     main()
