@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # The number with which the fidelity is increased in network.yaml
-delta_fidelity = 0.025
+delta_fidelity = 0.02
 
 # An empty array to store the output values in
 measurements = []
@@ -35,15 +35,18 @@ while fidelity <=1:
 
 # Convert the measurements to an array
 measurements = np.array(measurements)
-
+x= np.arange(0.25,1,0.001)
+analytical_fraction = lambda x: (x**2+1/9*(1-x)**2)/(x**2+2/3*x*(1-x)+5/9*(1-x)**2)/x
 # Plot the results
-plt.plot(measurements[:,0],measurements[:,1]/measurements[:,0])
-plt.plot(measurements[:,0],1+0*measurements[:,1]/measurements[:,0],"k:")
+plt.plot(measurements[:,0],measurements[:,1]/measurements[:,0],label="Measured values")
+
+# Plot the analytical solution
+plt.plot(x,analytical_fraction(x),":",label="Analytical solution")
 
 plt.title("The fraction $F_{out}/F_{in}$ upon success as function of $F_{in}$")
 plt.xlabel("$F_{in}$")
 plt.ylabel("$F_{out}/F_{in}$")
-plt.grid(axis="x")
+plt.grid()
 plt.show()
 
 
