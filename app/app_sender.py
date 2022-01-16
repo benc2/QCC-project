@@ -26,10 +26,19 @@ def main(app_config=None, phi=0., theta=0.):
     with sender:
         # Create a qubit to teleport
         q = Qubit(sender)
-        set_qubit_state(q, phi, theta)
 
+        set_qubit_state(q, phi, theta)
+        epr= Qubit(sender)
+        sender.flush()
         # Create EPR pairs
-        epr = epr_socket.create()[0]
+        for ii in range(100):
+            epr.measure()
+            sender.flush()
+
+            epr = epr_socket.create()[0]
+
+            sender.flush()
+            print(ii)
 
         # Teleport
         q.cnot(epr)

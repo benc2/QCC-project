@@ -8,7 +8,7 @@ def main(app_config=None):
     socket = Socket("alice","bob")
 
     # Create a EPR socket for entanglement generation
-    epr_socket = EPRSocket("bob",min_fidelity=50)
+    epr_socket = EPRSocket("bob",min_fidelity=80)
 
     # Initialize Alice's NetQASM connection
     alice = NetQASMConnection(
@@ -22,27 +22,34 @@ def main(app_config=None):
         # q1.rot_X(angle=1)
         info =q1.entanglement_info
         alice.flush()
-        print(info)
+        # print(info)
         original_dm = get_qubit_state(q1, reduced_dm=False)
-        print(original_dm)
+        # print(original_dm)
         alice.flush()
         q2 = epr_socket.create(1)[0]
         # q2.rot_X(angle=1)
 
-        if bbpssw_protocol_alice(q1, q2, alice, socket):
-            print("Alice keeps q1")
-
-        else:
-            print("Alice discards q2")
+        success = bbpssw_protocol_alice(q1, q2, alice, socket)
+        # if bbpssw_protocol_alice(q1, q2, alice, socket):
+        #     pass
+        #     # print("Alice keeps q1")
+        #
+        #
+        # else:
+        #     # print("Alice discards q1")
+        #
 
         dm = get_qubit_state(q1, reduced_dm=False)
         alice.flush()
 
-        print(dm)
+        # print(dm)
         phi00 = np.array([1, 0, 0, 1]) / np.sqrt(2)
         F_in = phi00.T @ original_dm @ phi00
         F_out = phi00.T @ dm @ phi00
-        print(F_in, F_out)
+        print(success)
+        print(np.real(F_in))
+        print(np.real(F_out))
+        return
 
 if __name__ == "__main__":
     main()
