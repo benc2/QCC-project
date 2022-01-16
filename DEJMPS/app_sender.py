@@ -23,7 +23,8 @@ def main(app_config=None, phi=0., theta=0.):
         log_config=log_config,
         epr_sockets=[epr_socket]
     )
-    N = 3
+    N = 4
+    socket.send_structured(StructuredMessage("Number of iterations", N))
     # epr_list = epr_socket.create(number=N+1)
     success = False
     with sender:
@@ -31,7 +32,7 @@ def main(app_config=None, phi=0., theta=0.):
             # sender.flush()
             print(f"iteration {i+1}")
             # Create EPR pairs
-            print(f"Alice: success={success}")
+            # print(f"Alice: success={success}")
             if not success:
                 epr1 = epr_socket.create()[0]  # note: in the paper, Eve makes the pairs
             # print("Alice sent first pair")
@@ -43,46 +44,52 @@ def main(app_config=None, phi=0., theta=0.):
             # epr1 = epr_list[0]
             # original_dm = get_qubit_state(epr1, reduced_dm=False)
             # epr2 = epr_list[i+1]
-            print("After receive")
+            # print("After receive")
             sender.flush()
-            print("Alice has created the EPR pairs")
+            # print("Alice has created the EPR pairs")
             sender.flush()
             epr1.rot_X(1)  # in units of pi/2
             epr2.rot_X(1)
             epr1.cnot(epr2)
-            print("Alice applied her gates")
+            # print("Alice applied her gates")
             sender.flush()
             sender_outcome = epr2.measure()
             sender.flush()  # flush only for print
-            print(f"Alice measured {sender_outcome}")
+            # print(f"Alice measured {sender_outcome}")
 
 
             # Send the correction information
 
-            socket.send_structured(StructuredMessage("Corrections", sender_outcome))
-            print(f"Alice sent her outcome {sender_outcome} to Bob")
+            socket.send_structured(StructuredMessage("Alice\'s outcome", sender_outcome))
+            # print(f"Alice sent her outcome {sender_outcome} to Bob")
             sender.flush()
+
+            success = socket.recv_structured().payload
+            sender.flush()
+
             dm = get_qubit_state(epr1, reduced_dm=False)
+
+            socket.send_structured(StructuredMessage("Acknowledged", '0'))  # this is just to make sure that Alice
+            #                                                                 gets the epr1 state before Bob measures it
 
             phi00 = np.array([1, 0, 0, 1]) / np.sqrt(2)
             print(original_dm.shape)
             print(dm.shape)
             F_in = phi00.T @ original_dm @ phi00
             F_out = phi00.T @ dm @ phi00
-            print(f"F_in: {np.real(F_in)}, F_out: {np.real(F_out)}")
-            success = socket.recv_structured().payload
-            sender.flush()
+            print(f"F_in: {np.round(np.real(F_in), 3)}, F_out: {np.round(np.real(F_out), 3)}")
+
             # if not success:
             #     return
-            print("Alice tries to free")
+            # print("Alice tries to free")
             sender.flush()
             if not success:
-                print("Not free")
+                # print("Not free")
                 epr1.measure()
-                print("Free")
-            print("flush?")
+                # print("Free")
+            # print("flush?")
             sender.flush()
-            print("flush!")
+            # print("flush!")
 
 if __name__ == "__main__":
     main()
