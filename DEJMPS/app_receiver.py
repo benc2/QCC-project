@@ -19,22 +19,23 @@ def main(app_config=None):
         epr_sockets=[epr_socket]
     )
     success = False
-    N = 3
+    N = socket.recv_structured().payload
+    receiver.flush()
     # epr_list = epr_socket.recv(number=N+1)
     with receiver:
         for i in range(N):
-            print("begin of loop Bob")
+            # print("begin of loop Bob")
 
-            print("Before receive")
-            print(f"Bob: success={success}")
+            # print("Before receive")
+            # print(f"Bob: success={success}")
             if not success:
                 epr1 = epr_socket.recv()[0]
             # epr1 = epr_list[0]
             # epr2 = epr_list[i+1]
-            print("After receive")
+            # print("After receive")
             receiver.flush()
             epr2 = epr_socket.recv()[0]
-            print("Bob has received the EPR pairs")
+            # print("Bob has received the EPR pairs")
             receiver.flush()
 
 
@@ -42,14 +43,14 @@ def main(app_config=None):
             epr1.rot_X(3)  # in units of pi/2, 3pi/2 = -pi/2 mod 2pi
             epr2.rot_X(3)
             epr1.cnot(epr2)
-            print("Bob applied his gates")
+            # print("Bob applied his gates")
             receiver.flush()
             receiver_outcome = epr2.measure()
             receiver.flush()
-            print(f"Bob measured {receiver_outcome}")
+            # print(f"Bob measured {receiver_outcome}")
             sender_outcome = socket.recv_structured().payload
             receiver.flush()
-            print(f"Bob received outcome {sender_outcome} from Alice")
+            # print(f"Bob received outcome {sender_outcome} from Alice")
 
             success = sender_outcome == receiver_outcome
             if success:
@@ -62,8 +63,9 @@ def main(app_config=None):
             receiver.flush()
             # if not success:
             #     return
-            print("End of loop Bob")
-            print("Bob tries to free")
+            # print("End of loop Bob")
+            # print("Bob tries to free")
+            socket.recv_structured()  # acknowledgement before destroying epr1
             receiver.flush()
             if not success:
                 epr1.measure()
