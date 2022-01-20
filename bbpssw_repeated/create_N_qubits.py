@@ -5,7 +5,7 @@ for n in range(number_of_qubits):
 
 
     fin = open("network_template.yaml", "rt")
-    fout = open("network.yaml", "wt")
+    fout = open("network_with_qubits_template.yaml", "wt")
 
     # Update the fidelity in network.yaml
     for line in fin:

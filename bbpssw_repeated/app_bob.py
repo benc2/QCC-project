@@ -2,11 +2,11 @@ from bbpssw import bbpssw_protocol_bob
 from netqasm.sdk import EPRSocket
 from netqasm.sdk.external import NetQASMConnection, Socket, get_qubit_state
 import numpy as np
-def main(app_config=None):
+def main(app_config=None, depth=1):
     # Create a socket for classical communication
     socket=Socket("bob","alice")
 
-    N= 3
+    N= depth + 1
 
 
     # Create a EPR socket for entanglement generation
@@ -21,19 +21,20 @@ def main(app_config=None):
 
     # Create Bob's context, initialize EPR pairs inside it and call Bob's BBPSSW method. Finally, print out whether or not Bob successfully created an EPR Pair with Alice.
     with bob:
-        q1 = epr_socket.recv(number = 1)[0]
-        bob.flush()
-        q1.measure()
-        bob.flush()
+        # q1 = epr_socket.recv(number = 1)[0]
+        # bob.flush()
+        # q1.measure()
+        # bob.flush()
         eprs = epr_socket.recv(2**N)
         bob.flush()
-        while len(eprs)>=2:
+        # while len(eprs)>=2:
+        for n in range(depth):
 
             better_eprs = []
             socket.recv()
 
             socket.send(f"Yes, I'm ready Alice, most certainly!")
-            for i in range(1):#int(np.floor(len(eprs)/2))):
+            for i in range(int(np.floor(len(eprs)/2))):
 
                 if bbpssw_protocol_bob(eprs[2*i], eprs[2*i+1], bob, socket):
                     # print(f"Round {n+1}, qubit pair {i}, Bob keeps q1")
@@ -50,7 +51,7 @@ def main(app_config=None):
 
         success = len(eprs)>0
         if len(eprs)>1:
-            print("Bob is destroying qubits")
+            # print("Bob is destroying qubits")
             k= 1
             while k<len(eprs):
                 eprs[k].measure()
