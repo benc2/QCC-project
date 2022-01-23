@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # The number with which the fidelity is increased in network.yaml
-delta_fidelity = 0.02
+delta_fidelity = 0.01
 
 # An empty array to store the output values in
 measurements = []
