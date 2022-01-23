@@ -80,22 +80,22 @@ def plot_probability_of_success_from_files(gate_fidelity,fit=False,marker=".", c
             file.close()
 
     measurements = np.array(measurements).T
-    print(measurements)
+    # print(measurements)
 
     plt.plot(measurements[0], measurements[1],marker,markersize=2,color=color,label=label)
     if fit:
         plt.plot(measurements[0],np.poly1d(np.polyfit(measurements[0],measurements[1],2))(measurements[0]),linestyle="dashed",linewidth=1,color=color)
-    plt.xlabel("Link fidelity")
+    plt.xlabel("Input state fidelity")
     plt.ylabel("Rate of success")
     # plt.title("Protocol success rate as function of link fidelity")
     plt.grid()
     # plt.show()
-    return
+    return measurements[0], measurements[1]
 
 
-def gate_fidelity_plot(gate_fidelity = 0.98):
-    filename_start = "data_min_fidelity_at_gate_fidelity_"
-    folder = "bbpssw2/data"
+def gate_fidelity_plot(gate_fidelity = 1,analytic_solution=False,prefix="",color=None):
+    filename_start = f"{prefix}data_min_fidelity_at_gate_fidelity_"
+    folder = "data"
     file = open(f"{folder}/{filename_start}{gate_fidelity}.json")
     measurements = json.loads(file.read())
     file.close()
@@ -104,29 +104,29 @@ def gate_fidelity_plot(gate_fidelity = 0.98):
     measurements = np.array(measurements)
     np.sort(measurements)
     # Create data for analytical solution
-    p = np.arange(0.0, 1, 0.001)
-    analytical_fraction = lambda x: (x ** 2 + 1 / 9 * (1 - x) ** 2) / (
-            x ** 2 + 2 / 3 * x * (1 - x) + 5 / 9 * (1 - x) ** 2)
-    fid4 = lambda p: 1/16 + 15/16*p
-    fid2 = lambda p: 0.25 + 0.75*p
-    fid1 = lambda p: 0.5 + 0.5*p
-    par4 = lambda fid: (16 * fid - 1) / 15
-    par2 = lambda fid: (4 * fid - 1) / 3
-    par1 = lambda fid: (2 * fid - 1) /1
+    # p = np.arange(0.0, 1, 0.001)
+    # analytical_fraction = lambda x: (x ** 2 + 1 / 9 * (1 - x) ** 2) / (
+    #         x ** 2 + 2 / 3 * x * (1 - x) + 5 / 9 * (1 - x) ** 2)
+    # fid4 = lambda p: 1/16 + 15/16*p
+    # fid2 = lambda p: 0.25 + 0.75*p
+    # fid1 = lambda p: 0.5 + 0.5*p
+    # par4 = lambda fid: (16 * fid - 1) / 15
+    # par2 = lambda fid: (4 * fid - 1) / 3
+    # par1 = lambda fid: (2 * fid - 1) /1
 
 
 
-    plt.figure()
+    # plt.figure()
     # Plot the analytical solution
     # plt.plot(fid(p), fid(par(analytical_fraction(fid(p * gate_fidelity **MM))))/fid(p), ":", label="Analytical solution for perfect gates")
     # plt.plot(fid(p), analytical_fraction(fid(par(fid1(par1(fid(p))*gate_fidelity))*gate_fidelity**2))/fid(p), ":", label="Analytical solution for perfect gates")
     # plt.plot(fid2(p), analytical_fraction(fid2(par2(fid2(par2(fid2(p))*gate_fidelity**0))*gate_fidelity**2))/fid2(p), ":", label="Analytical solution for perfect gates")
     # Plot the results
-    plt.plot(measurements[:, 0], measurements[:, 1] / measurements[:, 0], label=f"Gate fidelity: {gate_fidelity}")
+    plt.plot(measurements[:, 0], measurements[:, 1] / measurements[:, 0], label=f"Gate fidelity {gate_fidelity}",color=color,linewidth=1)
 
     # plt.title("The fraction $F_{out}/F_{in}$ upon success as function of $F_{in}$")
-    plt.xlabel("$F_{in}$")
-    plt.ylabel("$F_{out}/F_{in}$")
+    plt.xlabel("Input state fidelity")
+    plt.ylabel("Ratio of output state fidelity over input state fidelity ")
 
     # gate_fidelity += delta_gate_fidelity
 
@@ -135,8 +135,8 @@ def gate_fidelity_plot(gate_fidelity = 0.98):
     plt.grid()
     plt.legend()
     # plt.show()
+    return measurements[:, 0], measurements[:, 1] / measurements[:, 0]
 
-# gate_fidelity_plot()
 
 
 def gate_fidelity_contour_plot():
@@ -168,13 +168,19 @@ def gate_fidelity_contour_plot():
     link_fidelities = np.array(link_fidelities)
     gate_fidelities, link_fidelities = np.meshgrid(gate_fidelities,link_fidelities)
 
-
-    cs = plt.contour(gate_fidelities,link_fidelities,measurements, levels=[0.8,0.85,0.875,0.9,0.925,0.95,0.975,1,1.025,1.05,1.075,1.1], colors="k", linestyles="solid", label="BBPSSW")
+    levels = [0.8,0.85,0.875,0.9,0.925,0.95,0.975,1,1.025,1.05,1.075,1.1]
+    styles = []
+    for level in levels:
+        if level == 1:
+            styles.append("solid")
+        else:
+            styles.append("dotted")
+    cs = plt.contour(gate_fidelities,link_fidelities,measurements, linewidths = 1,levels=levels,linestyles = styles, colors="k", label="BBPSSW")
     plt.clabel(cs)
     plt.xlim(gate_fidelities[0,0],1)
     plt.ylim(link_fidelities[0,0],1)
     # plt.title("The fraction $F_{out}/F_{in}$ upon success as function of $F_{in}$")
-    plt.xlabel("Gate fidelity")
+    plt.xlabel("Gate fidelity parameter")
     plt.ylabel("Link fidelity")
     # plt.title("Output fidelity as fraction of link fidelity")
 
@@ -196,10 +202,10 @@ def gate_fidelity_contour_plot():
 
 def do_simulations_for_contour_plot():
     # The number with which the fidelity is increased in network.yaml
-    delta_gate_fidelity = 0.001
-    delta_fidelity = 0.01
+    delta_gate_fidelity = 0.01
+    delta_fidelity = 0.01*4/3
     # The starting gate-fidelity for the network.yaml file
-    gate_fidelity = 0.9
+    gate_fidelity = 0.99
     # Loop over the fidelity
     while gate_fidelity <1+delta_gate_fidelity*0.5:
         if gate_fidelity >1:
@@ -255,3 +261,15 @@ def plot_theoretical_probability_of_success():
     p_succ = F_in**2 + 2*F_in*(1-F_in)/3+ 5*(1-F_in)**2/9
 
     plt.plot(F_in,p_succ,"k:",label="Theoretical probability of success")
+
+# def plot_ratio_at_gate_fidelities(fidelities=[0.99,1])
+
+def plot_expected_relative_increase(input_fidelities, fractions,success_rate,input_pairs=2,label="",color=None,linestyle=None,linewidth=1):
+    expectation = (fractions-1)*success_rate/input_pairs
+    plt.plot(input_fidelities,expectation,label=label,color=color,linestyle=linestyle,linewidth=linewidth)
+    plt.grid()
+    plt.axhline(0, linestyle='-', color='k')  # horizontal line at 0
+    plt.xlabel("Input state fidelity")
+    plt.ylabel("Expected relative improvement")
+    return input_fidelities, expectation
+
