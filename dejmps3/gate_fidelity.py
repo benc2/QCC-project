@@ -47,8 +47,8 @@ def get_fidelity_ratio(gate_fidelity, link_fidelity):
 
 # to fix: lf 0.41, gf 0.918
 # somewhere in gf 0.927
-filename = "gate_fidelity_data2.csv"
-gate_fidelities = np.arange(0.97, 1.00001, 0.001)
+filename = "gate_fidelity_data.csv"
+gate_fidelities = np.arange(0.945, 1.00001, 0.001)
 link_fidelities = np.arange(0, 1.00001, 0.01)
 with open(filename, 'a') as file:
     writer = csv.writer(file, delimiter=',')
