@@ -2,7 +2,7 @@ import json
 import os.path
 
 from report_functions import n_attempts_with_given_fidelity, plot_probability_of_success_from_files
-gate_fidelity = 0.99
+gate_fidelity = 1
 fidelity_param = 0
 delta_fidelity = 0.01
 number_of_measurements_per_fidelity_value = 1000
