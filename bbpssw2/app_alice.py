@@ -49,6 +49,7 @@ def main(app_config=None):
         print(success)
         print(np.real(F_in))
         print(np.real(F_out))
+        # print(np.real(dm))
         return
 
 if __name__ == "__main__":

@@ -8,22 +8,32 @@
   PTH:
   - ch1
   QGR:
-    8759791397012:
+    8782391712764:
       is_entangled: false
       qubit_ids:
       - - sender
         - 0
       state:
-      - - !!python/complex 0.5353686076665485
-        - !!python/complex 0.4987474928174875
-      - - !!python/complex 0.4987474928174875
-        - !!python/complex 0.46463139233345147
+      - - !!python/complex 0.9450549450549451
+        - !!python/complex 0.0
+      - - !!python/complex 0.0
+        - !!python/complex 0.054945054945054944
+    8782391721872:
+      is_entangled: false
+      qubit_ids:
+      - - receiver
+        - 0
+      state:
+      - - !!python/complex 0.9500000000000001
+        - !!python/complex 0.0
+      - - !!python/complex 0.0
+        - !!python/complex 0.04999999999999999
   QID:
   - 1
-  - 0
-  SIT: 106376.0
+  - 1
+  SIT: 803214.0
   TYP: null
-  WCT: '2021-12-22 17:26:57.957152'
+  WCT: '2022-01-20 15:33:41.614533'
 - BAS: null
   INS: epr_EntanglementStage.FINISH
   LOG: entanglement of type 0 created between the_hague and delft
@@ -34,27 +44,27 @@
   PTH:
   - ch1
   QGR:
-    8759791397012:
+    8782391712764:
       is_entangled: false
       qubit_ids:
       - - sender
         - 0
       state:
-      - - !!python/complex 0.5353686076665485
-        - !!python/complex 0.4987474928174875
-      - - !!python/complex 0.4987474928174875
-        - !!python/complex 0.46463139233345147
-    8759792489564:
+      - - !!python/complex 0.9450549450549451
+        - !!python/complex 0.0
+      - - !!python/complex 0.0
+        - !!python/complex 0.054945054945054944
+    8782391720304:
       is_entangled: true
       qubit_ids:
       - - sender
         - 1
       - - receiver
-        - 0
+        - 1
       state: null
   QID:
   - 1
-  - 0
-  SIT: 106377.0000000001
+  - 1
+  SIT: 803215.0000000001
   TYP: epr_EntanglementType.CK
-  WCT: '2021-12-22 17:26:57.959318'
+  WCT: '2022-01-20 15:33:41.675350'

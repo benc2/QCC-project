@@ -206,4 +206,4 @@ links:
     node_name1: "delft"
     node_name2: "the_hague"
     noise_type: Depolarise
-    fidelity: 0.8
+    fidelity: 0.8666666666666667

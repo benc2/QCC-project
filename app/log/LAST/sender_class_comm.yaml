@@ -1,10 +1,28 @@
 - HFL: /home/rik/PycharmProjects/QCC-project/app/app_sender.py
-  HLN: 48
+  HLN: 45
   INS: SEND
-  LOG: 'Send classical message to receiver: {"header": "Corrections", "payload": [0,
-    1]}'
-  MSG: 'Corrections: (0, 1)'
+  LOG: 'Send classical message to receiver: '
+  MSG: ''
   REC: receiver
   SEN: sender
   SOD: 0
-  WCT: '2021-12-22 17:26:58.087330'
+  WCT: '2022-01-20 15:33:41.559592'
+- HFL: /home/rik/PycharmProjects/QCC-project/app/app_sender.py
+  HLN: 55
+  INS: SEND
+  LOG: 'Send classical message to receiver: '
+  MSG: ''
+  REC: receiver
+  SEN: sender
+  SOD: 0
+  WCT: '2022-01-20 15:33:41.680577'
+- HFL: /home/rik/PycharmProjects/QCC-project/app/app_sender.py
+  HLN: 71
+  INS: SEND
+  LOG: 'Send classical message to receiver: {"header": "Corrections", "payload": [1,
+    1]}'
+  MSG: 'Corrections: (1, 1)'
+  REC: receiver
+  SEN: sender
+  SOD: 0
+  WCT: '2022-01-20 15:33:41.830829'
