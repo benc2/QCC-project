@@ -21,32 +21,36 @@ def main(app_config=None):
     with receiver:
         epr = Qubit( receiver)
         receiver.flush()
-        for ii in range(100):
+        socket.recv()
+        for ii in range(1):
             epr.measure()
             receiver.flush()
 
             epr = epr_socket.recv()[0]
             receiver.flush()
-
-            print(ii)
+            receiver.flush()
+            receiver.flush()
+            receiver.flush()
+            socket.recv()
+            # print(ii)
         receiver.flush()
 
 
         # Get the corrections
         m1, m2 = socket.recv_structured().payload
-        print(f"`receiver` got corrections: {m1}, {m2}")
+        # print(f"`receiver` got corrections: {m1}, {m2}")
         if m2 == 1:
-            print("`receiver` will perform X correction")
+            # print("`receiver` will perform X correction")
             epr.X()
         if m1 == 1:
-            print("`receiver` will perform Z correction")
+            # print("`receiver` will perform Z correction")
             epr.Z()
 
         receiver.flush()
         # Get the qubit state
         # NOTE only possible in simulation, not part of actual application
         dm = get_qubit_state(epr)
-        print(f"`receiver` recieved the teleported state {dm}")
+        # print(f"`receiver` recieved the teleported state {dm}")
 
         # Reconstruct the original qubit to compare with the received one
         # NOTE only to check simulation results, normally the Sender does not

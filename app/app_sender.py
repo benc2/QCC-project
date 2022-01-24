@@ -1,5 +1,6 @@
+import numpy as np
 from netqasm.sdk import Qubit, EPRSocket
-from netqasm.sdk.external import NetQASMConnection, Socket
+from netqasm.sdk.external import NetQASMConnection, Socket, get_qubit_state
 from netqasm.sdk.toolbox import set_qubit_state
 from netqasm.logging.output import get_new_app_logger
 from netqasm.sdk.classical_communication.message import StructuredMessage
@@ -27,18 +28,31 @@ def main(app_config=None, phi=0., theta=0.):
         # Create a qubit to teleport
         q = Qubit(sender)
 
-        set_qubit_state(q, phi, theta)
+        # set_qubit_state(q, phi, theta)
         epr= Qubit(sender)
         sender.flush()
+        q.cnot(epr)
+        # q.cnot(epr)
+        # q.cnot(epr)
+        # q.cnot(epr)
+
+        # epr.X()
+        # epr.X()
+        sender.flush()
+        dm = get_qubit_state(q, reduced_dm=False)
+        dm2 = get_qubit_state(epr, reduced_dm=False)
+        sender.flush()
+        socket.send("")
         # Create EPR pairs
-        for ii in range(100):
+        for ii in range(1):
             epr.measure()
             sender.flush()
-
             epr = epr_socket.create()[0]
 
             sender.flush()
-            print(ii)
+            sender.flush()
+            # print(ii)100
+            socket.send("")
 
         # Teleport
         q.cnot(epr)
@@ -51,12 +65,16 @@ def main(app_config=None, phi=0., theta=0.):
 
     app_logger.log(f"m1 = {m1}")
     app_logger.log(f"m2 = {m2}")
-    print(f"`sender` measured the following teleportation corrections: m1 = {m1}, m2 = {m2}")
-    print("`sender` will send the corrections to `receiver`")
+    # print(f"`sender` measured the following teleportation corrections: m1 = {m1}, m2 = {m2}")
+    # print("`sender` will send the corrections to `receiver`")
 
     socket.send_structured(StructuredMessage("Corrections", (m1, m2)))
 
     socket.send_silent(str((phi, theta)))
+    phi = np.array([1, 0, 0, 0])
+    print(phi.T @ dm @ phi)
+    print(dm)
+    print(dm2)
 
     return {
         "m1": m1,
