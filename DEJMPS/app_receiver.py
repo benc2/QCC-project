@@ -1,3 +1,4 @@
+import numpy as np
 from netqasm.sdk import EPRSocket
 from netqasm.sdk.external import NetQASMConnection, Socket, get_qubit_state
 from netqasm.sdk.toolbox.sim_states import qubit_from, to_dm, get_fidelity
@@ -40,11 +41,12 @@ def main(app_config=None):
 
 
             # print(f"Bob received outcome {sender_outcome} from Alice")
-            epr1.rot_X(3)  # in units of pi/2, 3pi/2 = -pi/2 mod 2pi
-            epr2.rot_X(3)
+            epr1.rot_X(3, 1)  # X-rotation of 3pi/2 = -pi/2 mod 2pi
+            epr2.rot_X(3, 1)
+            # epr1.H()
             epr1.cnot(epr2)
             # print("Bob applied his gates")
-            receiver.flush()
+            # receiver.flush()
             receiver_outcome = epr2.measure()
             receiver.flush()
             # print(f"Bob measured {receiver_outcome}")
