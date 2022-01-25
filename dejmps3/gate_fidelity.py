@@ -45,15 +45,18 @@ def get_fidelity_ratio(gate_fidelity, link_fidelity):
 #
 #     return (min_input_fidelity + max_input_fidelity)/2
 
+print(get_fidelity_ratio(0.919, 0.41))
+quit()
+
 # to fix: lf 0.41, gf 0.918
 # somewhere in gf 0.927
 filename = "gate_fidelity_data.csv"
-gate_fidelities = np.arange(0.945, 1.00001, 0.001)
+gate_fidelities = [0.927, 0.969]  # np.arange(0.945, 1.00001, 0.001)
 link_fidelities = np.arange(0, 1.00001, 0.01)
-with open(filename, 'a') as file:
-    writer = csv.writer(file, delimiter=',')
-    writer.writerow(np.append([-1], link_fidelities))  #-1 just to make it square
-    print("written")
+# with open(filename, 'a') as file:
+#     writer = csv.writer(file, delimiter=',')
+#     writer.writerow(np.append([-1], link_fidelities))  #-1 just to make it square
+#     print("written")
 
 
 for f_gate in gate_fidelities:
