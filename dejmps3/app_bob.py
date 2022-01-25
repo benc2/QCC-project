@@ -21,7 +21,7 @@ def main(app_config=None):
         q1, q2 = epr_socket.recv(number=2)
         success = dejmps_protocol_bob(q1, q2, bob, socket)
         socket.send_structured(StructuredMessage("Success?", success))
-        print(f"Bob: {success}")
+        # print(f"Bob: {success}")
 
 if __name__ == "__main__":
     main()
