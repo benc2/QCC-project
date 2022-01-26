@@ -67,7 +67,7 @@ def determine_required_purification_tree_length(start_fidelity, target_fidelity)
 
 def plot_probability_of_success_from_files(gate_fidelity,fit=False,marker=".", color="black",label="Unknown",sample_size = None):
     measurements = []
-    filename_start = "data_success_rate_at_fidelity_"
+    filename_start = "success_rate_data_at_fidelity_"
     folder = "data"
     filelist= os.listdir(folder)
     filelist.sort()
@@ -80,6 +80,8 @@ def plot_probability_of_success_from_files(gate_fidelity,fit=False,marker=".", c
             file.close()
 
     measurements = np.array(measurements).T
+    measurements = measurements[:,np.argsort(measurements[0])]
+
     # print(measurements)
 
     plt.plot(measurements[0], measurements[1],marker,markersize=2,color=color,label=label)
