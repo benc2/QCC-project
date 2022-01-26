@@ -28,10 +28,20 @@ def distillation_success(x):
 
 
 
-f_links = np.arange(0.5, 1.001, 0.01)
 N = 1000
-gate_fidelity = 0.99
-filename = f"probabilities{round(100*gate_fidelity)}_2.csv"
+gate_fidelity = 1
+filename = f"probabilities{round(100*gate_fidelity)}.csv"
+
+try:
+    with open(filename, 'r') as file:
+        data = np.genfromtxt(filename, delimiter=',')
+        starting_point = round(data[-1, 0] + 0.01, 2)
+except FileNotFoundError:
+    starting_point = 0
+
+# starting_point = 0.6 # temp override
+f_links = np.arange(starting_point, 1.001, 0.01)
+
 
 yamltools.change_gate_fidelity(gate_fidelity)
 for link_fidelity in f_links:
