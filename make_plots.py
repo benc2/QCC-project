@@ -7,6 +7,22 @@ from data_dejmps import dejmps_contour_data,dejmps_p_success_data
 from data_bbpssw import bbpssw_contour_data, bbpssw_p_success_data
 from data_three_to_one import three_to_one_contour_data, three_to_one_p_success_data
 
+
+
+def plot_theoretical_probability_of_success_BBPSSW_AND_DJEMPS():
+    F_in = 0.25 + 0.75 * np.arange(0,1.0001,0.001)
+    p_succ = F_in**2 + 2*F_in*(1-F_in)/3+ 5*(1-F_in)**2/9
+
+    plt.plot(F_in,p_succ,"k--",label="Theoretical value for\nDEJMPS and BBPSSW")
+
+
+def plot_theoretical_probability_of_success_tto():
+    F_in = 0.25 + 0.75 * np.arange(0,1.0001,0.001)
+    p_succ = (1+ 2*F_in)*(7-14*F_in+16*F_in**2)/27
+
+    plt.plot(F_in,p_succ,"k:",label="Theoretical value for\nThree to one")
+
+
 plt.rcParams["font.family"] = "Stix Two Text"
 plt.rcParams.update({'font.size': 14})
 
@@ -132,6 +148,8 @@ plt.figure("Success rate at gate fidelity p0.99")
 plt.plot(dejmps_p_success_data[0],dejmps_p_success_data[1], markers[0],markersize=2,color = colors[0],label=labels[0])
 plt.plot(bbpssw_p_success_data[0],bbpssw_p_success_data[1], markers[1],markersize=2,color = colors[1],label=labels[1])
 plt.plot(three_to_one_p_success_data[0],three_to_one_p_success_data[1], markers[2],markersize=2,color = colors[2],label=labels[2])
+plot_theoretical_probability_of_success_BBPSSW_AND_DJEMPS()
+plot_theoretical_probability_of_success_tto()
 plt.legend()
 plt.xlabel("Input state fidelity")
 plt.ylabel("Protocol success rate")
@@ -146,6 +164,9 @@ plt.figure("Success rate at gate fidelity p1.00")
 plt.plot(dejmps_p_success_data[0],dejmps_p_success_data[2], markers[0],markersize=2,color = colors[0],label=labels[0])
 plt.plot(bbpssw_p_success_data[0],bbpssw_p_success_data[2], markers[1],markersize=2,color = colors[1],label=labels[1])
 plt.plot(three_to_one_p_success_data[0],three_to_one_p_success_data[2], markers[2],markersize=2,color = colors[2],label=labels[2])
+plot_theoretical_probability_of_success_BBPSSW_AND_DJEMPS()
+plot_theoretical_probability_of_success_tto()
+
 plt.legend()
 plt.grid()
 plt.xlabel("Input state fidelity")
